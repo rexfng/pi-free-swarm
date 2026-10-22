@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { LabSnapshot } from "../../../../src/lab/service";
+import { LabTable } from "./LabTable";
 import styles from "./Lab.module.css";
 
 type DashboardSnapshot = LabSnapshot & { preview?: { recordedAt: string; description: string } };
@@ -94,95 +95,92 @@ export function LabPage() {
               Activity inferred from tools carries confidence. Time between events inherits the last state; it is an
               estimate.
             </p>
-            <table>
-              <thead>
-                <tr>
-                  <th>Agent</th>
-                  <th>State</th>
-                  <th>Current activity</th>
-                  <th>Active</th>
-                  <th>Idle / blocked</th>
-                  <th>Tool calls</th>
-                </tr>
-              </thead>
-              <tbody>
-                {coordination.agents.map((agent) => {
-                  const metrics = coordination.metrics.byAgent.find((entry) => entry.agentId === agent.id);
-                  const current = coordination.activities.find(
-                    (entry) => entry.agentId === agent.id && entry.endedAt === null,
-                  );
-                  return (
-                    <tr key={agent.id}>
-                      <td>{agent.id}</td>
-                      <td>{agent.state}</td>
-                      <td>
-                        {current
-                          ? `${current.category} · ${Math.round(current.confidence * 100)}% (${current.source})`
-                          : "—"}
-                      </td>
-                      <td>{seconds(metrics?.activeMs ?? 0)}</td>
-                      <td>{seconds((metrics?.idleMs ?? 0) + (metrics?.blockedMs ?? 0))}</td>
-                      <td>{metrics?.toolCalls ?? 0}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+            <LabTable
+              label="Agents and time allocation"
+              rows={coordination.agents.map((agent) => ({
+                ...agent,
+                metrics: coordination.metrics.byAgent.find((entry) => entry.agentId === agent.id),
+                current: coordination.activities.find((entry) => entry.agentId === agent.id && entry.endedAt === null),
+              }))}
+              rowKey={(agent) => agent.id}
+              columns={[
+                { label: "Agent", render: (agent) => <strong>{agent.id}</strong> },
+                { label: "State", render: (agent) => agent.state },
+                {
+                  label: "Current activity",
+                  render: ({ current }) =>
+                    current
+                      ? `${current.category} · ${Math.round(current.confidence * 100)}% (${current.source})`
+                      : "—",
+                },
+                { label: "Active", render: ({ metrics }) => seconds(metrics?.activeMs ?? 0) },
+                {
+                  label: "Idle / blocked",
+                  render: ({ metrics }) => seconds((metrics?.idleMs ?? 0) + (metrics?.blockedMs ?? 0)),
+                },
+                { label: "Tool calls", render: ({ metrics }) => metrics?.toolCalls ?? 0 },
+              ]}
+            />
             {coordination.agents.length === 0 && <p>No registered agents.</p>}
           </section>
           <div className={styles.columns}>
             <section className={styles.panel}>
               <h2>Task discovery and completion evidence</h2>
               <p>Completion is peer-attested. Integration and independent tests must verify the output.</p>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Task</th>
-                    <th>Status / owner</th>
-                    <th>Dependencies</th>
-                    <th>Execution</th>
-                    <th>Evidence</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {coordination.tasks.map((task) => (
-                    <tr key={task.id}>
-                      <td>
+              <LabTable
+                label="Tasks"
+                rows={coordination.tasks}
+                rowKey={(task) => task.id}
+                columns={[
+                  {
+                    label: "Task",
+                    fullWidth: true,
+                    render: (task) => (
+                      <>
                         <strong>{task.id}</strong>
                         <p>{task.title}</p>
-                      </td>
-                      <td>
+                      </>
+                    ),
+                  },
+                  {
+                    label: "Status / owner",
+                    render: (task) => (
+                      <>
                         {task.status}
                         <p>{task.owner ?? "Unclaimed"}</p>
-                      </td>
-                      <td>{task.dependencies.join(", ") || "—"}</td>
-                      <td>{seconds(task.executionMs)}</td>
-                      <td>{task.evidence ?? "—"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                      </>
+                    ),
+                  },
+                  { label: "Dependencies", render: (task) => task.dependencies.join(", ") || "—" },
+                  { label: "Execution", render: (task) => seconds(task.executionMs) },
+                  {
+                    label: "Evidence",
+                    fullWidth: true,
+                    render: (task) =>
+                      task.evidence ? (
+                        <details>
+                          <summary>View completion evidence</summary>
+                          <p>{task.evidence}</p>
+                        </details>
+                      ) : (
+                        "—"
+                      ),
+                  },
+                ]}
+              />
             </section>
             <section className={styles.panel}>
               <h2>File ownership</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Path</th>
-                    <th>Owner</th>
-                    <th>Lease expires</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {coordination.claims.map((claim) => (
-                    <tr key={claim.path}>
-                      <td>{claim.path}</td>
-                      <td>{claim.agentId}</td>
-                      <td>{time(claim.expiresAt)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+              <LabTable
+                label="File ownership"
+                rows={coordination.claims}
+                rowKey={(claim) => claim.path}
+                columns={[
+                  { label: "Path", fullWidth: true, render: (claim) => claim.path },
+                  { label: "Owner", render: (claim) => claim.agentId },
+                  { label: "Lease expires", render: (claim) => time(claim.expiresAt) },
+                ]}
+              />
               {coordination.claims.length === 0 && <p>No active file claims.</p>}
               <h3>Recent ownership events</h3>
               {coordination.fileHistory
@@ -204,28 +202,18 @@ export function LabPage() {
               Only requests routed through the bounded gateway are accounted here. External clients' model bills are not
               captured.
             </p>
-            <table>
-              <thead>
-                <tr>
-                  <th>Scope</th>
-                  <th>Limit</th>
-                  <th>Accounted</th>
-                  <th>Reserved</th>
-                  <th>Available</th>
-                </tr>
-              </thead>
-              <tbody>
-                {budget.scopes.map((scope) => (
-                  <tr key={scope.scope}>
-                    <td>{scope.scope}</td>
-                    <td>{dollars(scope.limitMicroUsd)}</td>
-                    <td>{dollars(scope.spentMicroUsd)}</td>
-                    <td>{dollars(scope.reservedMicroUsd)}</td>
-                    <td>{dollars(scope.remainingMicroUsd)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <LabTable
+              label="Budget and usage"
+              rows={budget.scopes}
+              rowKey={(scope) => scope.scope}
+              columns={[
+                { label: "Scope", render: (scope) => scope.scope },
+                { label: "Limit", render: (scope) => dollars(scope.limitMicroUsd) },
+                { label: "Accounted", render: (scope) => dollars(scope.spentMicroUsd) },
+                { label: "Reserved", render: (scope) => dollars(scope.reservedMicroUsd) },
+                { label: "Available", render: (scope) => dollars(scope.remainingMicroUsd) },
+              ]}
+            />
             {budget.scopes.length === 0 && <p>No budgets configured: gateway requests are blocked.</p>}
             <p>
               {budget.requests} gateway requests · {budget.inputTokens} input / {budget.outputTokens} output tokens ·{" "}
@@ -242,33 +230,21 @@ export function LabPage() {
           <div className={styles.columns}>
             <section className={styles.panel}>
               <h2>Activity timeline</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Time</th>
-                    <th>Agent</th>
-                    <th>Activity</th>
-                    <th>Duration</th>
-                    <th>Evidence</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {coordination.activities
-                    .slice(-30)
-                    .reverse()
-                    .map((activity) => (
-                      <tr key={activity.id}>
-                        <td>{time(activity.startedAt)}</td>
-                        <td>{activity.agentId}</td>
-                        <td>{activity.category}</td>
-                        <td>{seconds(activity.durationMs)}</td>
-                        <td>
-                          {activity.source} · {Math.round(activity.confidence * 100)}%
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
+              <LabTable
+                label="Activity timeline"
+                rows={coordination.activities.slice(-30).reverse()}
+                rowKey={(activity) => activity.id}
+                columns={[
+                  { label: "Time", render: (activity) => time(activity.startedAt) },
+                  { label: "Agent", render: (activity) => activity.agentId },
+                  { label: "Activity", render: (activity) => activity.category },
+                  { label: "Duration", render: (activity) => seconds(activity.durationMs) },
+                  {
+                    label: "Evidence",
+                    render: (activity) => `${activity.source} · ${Math.round(activity.confidence * 100)}%`,
+                  },
+                ]}
+              />
             </section>
             <section className={styles.panel}>
               <h2>Shared discussion</h2>
