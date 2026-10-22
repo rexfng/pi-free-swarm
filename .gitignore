@@ -17,3 +17,5 @@ dist/
 .idea/
 .vscode/
 tmp/
+.playwright-cli/
+output/

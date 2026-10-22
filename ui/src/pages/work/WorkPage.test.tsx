@@ -88,7 +88,7 @@ afterEach(() => {
 
 function renderWork(path = "/s/3/work") {
   render(
-    <MemoryRouter initialEntries={[path]} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+    <MemoryRouter initialEntries={[path]}>
       <Routes>
         <Route
           path="/s/:id"

@@ -21,10 +21,14 @@ const swarmId = seedSwarm(db, { now: Date.now() }).id;
 
 function runWriter(author: string, peer: string): Promise<{ code: number | null; stderr: string }> {
   const args = [db.path, String(swarmId), author, peer, String(LOCKSTEP), String(BURST)];
-  const child = spawn(process.execPath, ["--import", "tsx/esm", writer, ...args], {
-    cwd: repoRoot,
-    stdio: ["ignore", "ignore", "pipe"],
-  });
+  const child = spawn(
+    process.execPath,
+    ["--disable-warning=ExperimentalWarning", "--import", "tsx/esm", writer, ...args],
+    {
+      cwd: repoRoot,
+      stdio: ["ignore", "ignore", "pipe"],
+    },
+  );
   children.push(child);
   let stderr = "";
   child.stderr?.on("data", (chunk: Buffer) => (stderr += chunk.toString()));

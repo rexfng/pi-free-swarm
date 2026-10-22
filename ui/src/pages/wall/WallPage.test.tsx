@@ -77,7 +77,7 @@ afterEach(() => {
 
 async function renderWall(path = "/s/3/wall") {
   render(
-    <MemoryRouter initialEntries={[path]} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+    <MemoryRouter initialEntries={[path]}>
       <SwarmStreamProvider swarmId="3">
         <Routes>
           <Route path="/s/:id/wall/:postId?" element={<WallPage />} />

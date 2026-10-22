@@ -6,11 +6,13 @@ import { WallPage } from "./pages/wall/WallPage";
 import { WatcherPage } from "./pages/watcher/WatcherPage";
 import { WorkPage } from "./pages/work/WorkPage";
 import { SwarmLayout } from "./shell/SwarmLayout";
+import { LabPage } from "./pages/lab/LabPage";
 
 export function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/lab" element={<LabPage />} />
         <Route path="/" element={<PickerPage />} />
         <Route path="/s/:id" element={<SwarmLayout />}>
           <Route index element={<Navigate to="agents" replace />} />

@@ -1,0 +1,212 @@
+{
+  "kind": "interactive-session-three-peer-coding-exercise",
+  "startedAtMs": 1792649018517,
+  "finishedAtMs": 1792649204696,
+  "agentWindowMs": 186179,
+  "tokens": null,
+  "totalModelCostUsd": null,
+  "additionalPaidApiRequests": 0,
+  "duplicateInvestigations": null,
+  "testResults": {
+    "passed": 19,
+    "failed": 0
+  },
+  "metrics": {
+    "totalTasks": 3,
+    "completedTasks": 3,
+    "messages": 9,
+    "fileConflicts": 0,
+    "taskRetries": 0,
+    "toolCalls": 61,
+    "toolFailures": 0,
+    "averageTaskDurationMs": 188237.33333333334,
+    "completedTasksPerMinute": 0.8629492729652375,
+    "activeMs": 422885,
+    "coordinationMs": 132,
+    "coordinationOverheadRatio": 0.0003121415987798101,
+    "byAgent": [
+      {
+        "agentId": "peer-c",
+        "activityMs": {
+          "understanding": 0,
+          "research": 46314,
+          "hypothesis": 0,
+          "implementation": 104135,
+          "debugging": 0,
+          "testing": 24582,
+          "review": 0,
+          "coordination": 54,
+          "compaction": 0,
+          "housekeeping": 154,
+          "idle": 10940,
+          "blocked": 0
+        },
+        "activeMs": 175239,
+        "idleMs": 10940,
+        "blockedMs": 0,
+        "toolCalls": 25,
+        "toolFailures": 0
+      },
+      {
+        "agentId": "peer-b",
+        "activityMs": {
+          "understanding": 0,
+          "research": 29933,
+          "hypothesis": 0,
+          "implementation": 96570,
+          "debugging": 0,
+          "testing": 32062,
+          "review": 0,
+          "coordination": 40,
+          "compaction": 0,
+          "housekeeping": 154,
+          "idle": 15459,
+          "blocked": 0
+        },
+        "activeMs": 158759,
+        "idleMs": 15459,
+        "blockedMs": 0,
+        "toolCalls": 18,
+        "toolFailures": 0
+      },
+      {
+        "agentId": "peer-a",
+        "activityMs": {
+          "understanding": 0,
+          "research": 21562,
+          "hypothesis": 0,
+          "implementation": 46193,
+          "debugging": 0,
+          "testing": 20933,
+          "review": 0,
+          "coordination": 38,
+          "compaction": 0,
+          "housekeeping": 161,
+          "idle": 14392,
+          "blocked": 0
+        },
+        "activeMs": 88887,
+        "idleMs": 14392,
+        "blockedMs": 0,
+        "toolCalls": 18,
+        "toolFailures": 0
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "math",
+      "title": "Implement ray intersection/vector math and independent numerical tests per CONTRACT.md",
+      "status": "done",
+      "owner": "peer-a",
+      "token": null,
+      "expiresAt": null,
+      "dependencies": [],
+      "createdAt": 1792648995459,
+      "completedAt": 1792649145257,
+      "evidence": "Commit e7b07e193cd6a41284fd78d0c700fea42ea36f14 on atom-swarm/peer-a. node --test test/math.test.mjs: 10 tests pass, 0 failures; vectors, normalized/unnormalized sphere rays, tangency, inside exits, misses, reflection, floor hits. No code retry; one wrong-cwd telemetry CLI command corrected before tests. Both file leases released. Session model tokens and dollars unavailable.",
+      "claimCount": 1,
+      "executionMs": 97111
+    },
+    {
+      "id": "renderer",
+      "title": "Implement pure deterministic sphere/checker/shadow ray renderer plus numerical image tests per CONTRACT.md",
+      "status": "done",
+      "owner": "peer-b",
+      "token": null,
+      "expiresAt": null,
+      "dependencies": [],
+      "createdAt": 1792648995746,
+      "completedAt": 1792649202651,
+      "evidence": "Commit 4ea2603d9045953b2104dab4f57f3e01e9ebf019 on atom-swarm/peer-b. Three renderer tests pass on first attempt with actual peer-a/math.mjs imported read-only via a temporary loader. Tests: deterministic opaque RGBA/colored spheres; light-camera-reflection sensitivity; image/options bounds. No failed checks or code retries. Integration/browser inspection remains root responsibility.",
+      "claimCount": 1,
+      "executionMs": 158930
+    },
+    {
+      "id": "interface",
+      "title": "Build accessible interactive HTML5 ray tracer canvas UI and controls per CONTRACT.md",
+      "status": "done",
+      "owner": "peer-c",
+      "token": null,
+      "expiresAt": null,
+      "dependencies": [],
+      "createdAt": 1792648996037,
+      "completedAt": 1792649204046,
+      "evidence": "Commit 13727e06b55a2c5ecdafea9c35ff9e90a6c975f9. node --test test/ui.test.mjs: 6 tests passed, no failed checks or repair attempts. Covers labels/local assets, first paint/timing, coalescing/radian conversion, bounded resize, reset/disposal, error handling. Actual browser/renderer integration remains for root after combining peer commits. All four source writes used file claims and controlled write_file; claims released.",
+      "claimCount": 1,
+      "executionMs": 175063
+    }
+  ],
+  "messages": [
+    {
+      "id": 1,
+      "agentId": "peer-c",
+      "to": null,
+      "body": "peer-c claimed interface. Building accessible canvas UI with bounded internal resolution, light/camera sliders, reflection toggle, render timing, and dependency-free static plus mocked-browser integration tests. I will use renderScene(width,height,{lightX,reflections,cameraAngle}) exactly as contracted; please confirm camera angle units (I propose radians).",
+      "createdAt": 1792649029296
+    },
+    {
+      "id": 2,
+      "agentId": "peer-b",
+      "to": null,
+      "body": "peer-b claimed renderer. I will implement deterministic sphere/checker/shadow rendering with reflection, camera angle and light controls using CONTRACT.md math exports. Math peer: please announce your worktree and test-ready export availability so I can test renderer with your exact module read-only.",
+      "createdAt": 1792649044055
+    },
+    {
+      "id": 3,
+      "agentId": "peer-a",
+      "to": null,
+      "body": "peer-a claimed math. Implementing contract-compatible immutable vector operations, ray/sphere and horizontal-plane intersections with positive-hit epsilon; tests cover tangency, misses, inside-sphere exits, behind-ray cases and reflection. No contract changes planned. Renderer peer can import math.mjs after my commit.",
+      "createdAt": 1792649056773
+    },
+    {
+      "id": 4,
+      "agentId": "peer-b",
+      "to": null,
+      "body": "Renderer contract detail: cameraAngle uses radians (default 0); lightX defaults -3; reflections defaults true. UI may convert degree slider to radians. Renderer rejects nonpositive/noninteger dimensions and images over 1,048,576 pixels; interactive UI should stay near 160\u2013400 px wide for responsive synchronous rendering.",
+      "createdAt": 1792649073898
+    },
+    {
+      "id": 5,
+      "agentId": "peer-a",
+      "to": null,
+      "body": "Math module ready and all 10 numerical tests passed on first code check. Exact source: <checkout>/tmp/atom-raytracer/worktrees/peer-a/math.mjs (read-only for peers). Epsilon is 1e-6, normalize([0,0,0]) returns zero, sphere intersection supports arbitrary nonzero direction magnitude. No contract deviation. I am committing now; one initial telemetry CLI invocation used wrong cwd and was corrected before tests ran.",
+      "createdAt": 1792649134879
+    },
+    {
+      "id": 6,
+      "agentId": "peer-a",
+      "to": null,
+      "body": "Math task completed. Commit e7b07e193cd6a41284fd78d0c700fea42ea36f14 (branch atom-swarm/peer-a), 10 numerical tests passing. All file claims released. Renderer peer may read exact math.mjs from my worktree. I am stopping my peer identity now.",
+      "createdAt": 1792649145559
+    },
+    {
+      "id": 7,
+      "agentId": "peer-c",
+      "to": null,
+      "body": "peer-c UI implementation ready; all 6 independent UI/controller tests pass. Confirmed camera slider converts degrees to your agreed radians. Default render 256\u00d7160, maximum 384\u00d7240, input coalesces into one animation frame, resize-aware. Only reads renderScene output; no renderer contract changes. Committing interface now; root can verify visually after integration.",
+      "createdAt": 1792649193328
+    },
+    {
+      "id": 8,
+      "agentId": "peer-b",
+      "to": null,
+      "body": "peer-b renderer complete: three test cases passed first attempt using a temporary Node import resolver to read peer-a/math.mjs without writing another peer source. Renderer has three colored spheres, checker floor, shadows, one reflection bounce, light and camera controls; deterministic tests cover RGBA, visible colors, option sensitivity, input bounds. Committing renderer.mjs and test/renderer.test.mjs only; zero failed tests or implementation retries.",
+      "createdAt": 1792649194289
+    },
+    {
+      "id": 9,
+      "agentId": "peer-c",
+      "to": null,
+      "body": "peer-c completed interface commit 13727e06b55a2c5ecdafea9c35ff9e90a6c975f9, 6 tests passed on initial attempt; no fixes or conflicts. All file leases released. UI expects local HTTP hosting (module imports) and awaits root browser verification after integrating renderer and math. Stopping peer identity.",
+      "createdAt": 1792649204365
+    }
+  ],
+  "limitations": [
+    "Peers are agents in this interactive Codex session, not an independently launched inexpensive-model swarm.",
+    "Root supplied task seeds and module contracts, launched peers, integrated commits and verified output. Peers discovered their own assignments and coordinated via Lab.",
+    "Tool telemetry covers Lab calls; external shell actions and all model tokens/cost are not automatically captured.",
+    "Activity includes explicit self-reports. Coordination percentages measure tool execution time, not all reasoning or communication overhead.",
+    "No matched one-agent AI coding baseline or price/model quality comparison was run."
+  ]
+}

@@ -45,9 +45,10 @@ test("the inactivity watchdog kills a silent agent and reports a crash", async (
   const clock = new FakeClock();
   const agent = superviseFake(SCENARIOS.inactivityStall, { clock, watchdog: FAST });
   try {
-    await agent.supervisor.launch(agent.fake.spec(), prompt("go"));
-    await agent.waitStatus("working");
-    await waitFor(() => clock.nextDelay() === FAST.idleTimeoutMs, "first turn");
+    await agent.supervisor.launch(agent.fake.spec(), prompt("[swarm message #7] go", [7]));
+    // The fake emits the user message after turn_start; prompt acceptance alone does not end startup.
+    await waitFor(() => agent.recorded.reads.some((ids) => ids.includes(7)), "first-turn user message");
+    assert.equal(clock.nextDelay(), FAST.idleTimeoutMs);
     clock.advance(FAST.idleTimeoutMs);
     await agent.waitStatus("crashed");
     const [crash] = agent.recorded.crashes;
@@ -60,9 +61,12 @@ test("the inactivity watchdog kills a silent agent and reports a crash", async (
 });
 
 test("a tool running longer than the inactivity timeout is never killed", async () => {
-  const agent = superviseFake(SCENARIOS.longTool(1_000), { watchdog: FAST });
+  const clock = new FakeClock();
+  const agent = superviseFake(SCENARIOS.longTool(1_000), { clock, watchdog: FAST });
   try {
     await agent.supervisor.launch(agent.fake.spec(), prompt("go"));
+    await waitFor(() => agent.recorded.activity.some((activity) => activity?.kind === "tool"), "tool starts");
+    clock.advance(FAST.idleTimeoutMs * 3);
     await agent.waitStatus("idle");
     assert.deepEqual(agent.recorded.crashes, []);
     assert.ok(agent.recorded.activity.some((activity) => activity?.kind === "tool"));
@@ -72,11 +76,12 @@ test("a tool running longer than the inactivity timeout is never killed", async 
 });
 
 test("an idle agent is never killed, however long it waits", async () => {
-  const agent = superviseFake(SCENARIOS.settle, { watchdog: FAST });
+  const clock = new FakeClock();
+  const agent = superviseFake(SCENARIOS.settle, { clock, watchdog: FAST });
   try {
     await agent.supervisor.launch(agent.fake.spec(), prompt("go"));
     await agent.waitStatus("idle");
-    await new Promise((resolve) => setTimeout(resolve, FAST.idleTimeoutMs * 3));
+    clock.advance(FAST.idleTimeoutMs * 3);
     assert.equal(agent.supervisor.status, "idle");
     assert.deepEqual(await agent.supervisor.deliver(prompt("wake")), { accepted: true });
     await agent.waitStatus("idle", 2);

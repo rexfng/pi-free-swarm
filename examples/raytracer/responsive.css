@@ -1,0 +1,70 @@
+@media (max-width: 850px) {
+  .shell {
+    padding: 22px;
+  }
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .controls-heading,
+  .note {
+    grid-column: 1 / -1;
+  }
+  .controls-heading,
+  .control {
+    margin-bottom: 0;
+  }
+  .toggle-row {
+    border-top: 0;
+    padding: 0;
+  }
+  .note {
+    margin-top: 0;
+  }
+}
+@media (max-width: 480px) {
+  .shell {
+    padding: 18px 14px;
+  }
+  .brand {
+    letter-spacing: 1px;
+    font-size: 10px;
+    gap: 6px;
+  }
+  .local {
+    font-size: 8px;
+    letter-spacing: 0.5px;
+  }
+  .introduction {
+    padding-top: 32px;
+  }
+  .controls {
+    padding: 22px 19px;
+    gap: 20px 16px;
+  }
+  .scene-bottom {
+    font-size: 8px;
+  }
+  .scene-bottom > span {
+    max-width: 150px;
+    line-height: 1.6;
+  }
+  footer {
+    align-items: flex-start;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 650px) {
+  .masthead {
+    flex-wrap: wrap;
+  }
+  .masthead nav {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
