@@ -2,6 +2,22 @@
 
 This fork adds a reusable local coordination service alongside the existing Pi extension. The Lab CLI, MCP server and `/lab` view use one SQLite WAL database per experiment. The original Pi runner and board remain available; its agents do not automatically gain Lab workspaces or budget enforcement.
 
+## Hosted demonstration
+
+Open the [dashboard](https://atom-swarm-lab.vercel.app/lab) and [interactive ray tracer](https://atom-swarm-lab.vercel.app/raytracer/). The dashboard contains the recorded three-agent experiment, with agent activity, tasks and messages. It explicitly labels the recording and does not poll or control agents. The ray tracer runs interactively in the browser.
+
+This Vercel deployment serves static files. It does not host the SQLite service or run background agents. Use the local board below for live experiments. A shared remote service would additionally need persistent compute/storage and authenticated clients.
+
+To export a new recording from a local run:
+
+```sh
+npm run build:ui
+node --import tsx/esm src/lab/cli.ts status --db /absolute/disposable/lab.db > /tmp/lab-snapshot.json
+node scripts/export-preview.mjs /tmp/lab-snapshot.json /tmp/atom-swarm-preview
+```
+
+Choose a new output directory. The exporter includes Vercel routing, strips absolute local paths and credential-like fields, and refuses common credential patterns. Review exported messages before publication; automated filtering cannot identify every kind of private content. Deploy only the generated static directory. The deployed project is `atom-swarm-lab` in the Origineer Consulting team.
+
 ## Run from the checkout
 
 Requires Node 22.13 or newer on macOS/Linux, Git and npm.

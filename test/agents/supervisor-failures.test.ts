@@ -45,9 +45,10 @@ test("the inactivity watchdog kills a silent agent and reports a crash", async (
   const clock = new FakeClock();
   const agent = superviseFake(SCENARIOS.inactivityStall, { clock, watchdog: FAST });
   try {
-    await agent.supervisor.launch(agent.fake.spec(), prompt("go"));
-    await agent.waitStatus("working");
-    await waitFor(() => clock.nextDelay() === FAST.idleTimeoutMs, "first turn");
+    await agent.supervisor.launch(agent.fake.spec(), prompt("[swarm message #7] go", [7]));
+    // The fake emits the user message after turn_start; prompt acceptance alone does not end startup.
+    await waitFor(() => agent.recorded.reads.some((ids) => ids.includes(7)), "first-turn user message");
+    assert.equal(clock.nextDelay(), FAST.idleTimeoutMs);
     clock.advance(FAST.idleTimeoutMs);
     await agent.waitStatus("crashed");
     const [crash] = agent.recorded.crashes;

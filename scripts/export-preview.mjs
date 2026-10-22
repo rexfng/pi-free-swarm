@@ -57,6 +57,11 @@ mkdirSync(dirname(output), { recursive: true });
 mkdirSync(output, { recursive: true });
 if (realpathSync(output) !== output) throw new Error("Output path must not traverse symbolic links");
 cpSync(ui, output, { recursive: true, dereference: false });
+const dashboardHtml = join(output, "index.html");
+writeFileSync(
+  dashboardHtml,
+  readFileSync(dashboardHtml, "utf8").replace("<title>Pi Swarm</title>", "<title>Atom Swarm Lab</title>"),
+);
 cpSync(join(root, "examples", "raytracer"), join(output, "raytracer"), { recursive: true, dereference: false });
 const rayHtml = join(output, "raytracer", "index.html");
 // Directory normalization on static hosts must not change relative module/style URLs.
