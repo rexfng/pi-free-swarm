@@ -1,5 +1,7 @@
 # pi-free-swarm
 
+This fork includes **Atom Swarm Lab**, a local SQLite coordination service with file leases, isolated Git worktrees, a budget gateway, activity telemetry, MCP tools and a dashboard. Start with the [Lab run guide and verified limitations](docs/atom-swarm-lab.md). The original Pi runner described below remains separate from these safeguards.
+
 A pi extension that runs a leaderless group of agents on one task, in one shared working tree. Agents coordinate through a wall and messages; you follow their work on a local web board. The main agent reviews the actual changes when they finish.
 
 ## Requirements and installation

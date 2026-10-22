@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import * as fs from "node:fs";
 import { test } from "node:test";
+import { AgentProcess } from "../../src/agents/agent-process.js";
 import { hasSessionFile } from "../../src/agents/launch.js";
 import { SCENARIOS, waitFor } from "../fixtures/fake-pi/harness.js";
 import { prompt, superviseFake } from "./supervisor-helpers.js";
@@ -76,6 +77,45 @@ test("an idle agent is woken by a delivered prompt and settles again", async () 
     assert.deepEqual(agent.recorded.statuses, ["starting", "working", "idle", "working", "idle"]);
     assert.deepEqual(agent.recorded.reads, [[7, 8]], "several markers in one prompt are all read");
     assert.equal(agent.recorded.usage.length, 2);
+  } finally {
+    await agent.cleanup();
+  }
+});
+
+test("an accepted prompt cannot be recovered again before its run events arrive", async (t) => {
+  const spawn = AgentProcess.spawn;
+  let holdEvents = false;
+  const held: (() => void)[] = [];
+  const delayedSpawn: typeof AgentProcess.spawn = (spec, handlers, clock) =>
+    spawn(
+      spec,
+      {
+        ...handlers,
+        onEvent: (event) => {
+          if (holdEvents) held.push(() => handlers.onEvent(event));
+          else handlers.onEvent(event);
+        },
+      },
+      clock,
+    );
+  t.mock.method(AgentProcess, "spawn", delayedSpawn);
+  const agent = superviseFake(SCENARIOS.settle);
+  try {
+    await agent.supervisor.launch(agent.fake.spec(), null);
+    assert.equal(agent.supervisor.status, "idle");
+    // Reproduce a prompt response arriving in an earlier stdout chunk than agent_start.
+    holdEvents = true;
+    const notice = prompt("[swarm message #7] checkpoint", [7]);
+    assert.deepEqual(await agent.supervisor.deliver(notice), { accepted: true });
+    assert.equal(agent.supervisor.status, "working");
+    assert.deepEqual(agent.recorded.reads, []);
+    assert.deepEqual(await agent.supervisor.recoverUnread(notice), { accepted: false, error: "Maria is working." });
+    holdEvents = false;
+    for (const deliverEvent of held.splice(0)) deliverEvent();
+    await agent.waitStatus("idle", 2);
+    assert.equal(agent.commands("prompt").length, 1);
+    assert.equal(agent.commands("clear_queue").length, 0);
+    assert.deepEqual(agent.recorded.reads, [[7]]);
   } finally {
     await agent.cleanup();
   }

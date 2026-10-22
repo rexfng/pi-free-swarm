@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#10151e" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%2310151e%22/%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%229%22 fill=%22%23a7e9c6%22/%3E%3C/svg%3E"
+    />
+    <title>Light, traced — Atom Swarm Lab</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./responsive.css" />
+    <script type="module" src="./app.mjs"></script>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="masthead">
+        <a class="brand" href="./"
+          ><span class="brand-mark" aria-hidden="true">◈</span> ATOM <span class="brand-divider">/</span> SWARM LAB</a
+        >
+        <nav aria-label="Experiment navigation">
+          <a class="dashboard-link" href="/lab">View swarm dashboard ↗</a
+          ><span class="local"><span aria-hidden="true"></span> IN YOUR BROWSER</span>
+        </nav>
+      </header>
+      <section class="introduction" aria-labelledby="title">
+        <p class="eyebrow">EXPERIMENT 001 · THREE AGENTS, ONE SCENE</p>
+        <h1 id="title">Light, traced<span>.</span></h1>
+        <p class="description">
+          A little world, built from rays. Move the light, orbit the camera, and see the math become an image.
+        </p>
+      </section>
+      <section class="workspace" aria-label="Interactive ray tracer">
+        <div class="scene-panel">
+          <div class="scene-top">
+            <span><span class="live-dot" aria-hidden="true"></span> LIVE SCENE</span
+            ><span id="dimensions">Preparing canvas</span>
+          </div>
+          <div id="stage" class="stage">
+            <canvas id="scene" aria-label="Ray-traced spheres on a checkerboard floor"
+              >Your browser needs canvas support to show this ray-traced scene.</canvas
+            >
+          </div>
+          <div class="scene-bottom">
+            <span>SPHERES / CHECKER FLOOR / SOFT COLOR</span
+            ><output id="render-status" role="status" aria-live="polite">Ready to trace</output>
+          </div>
+        </div>
+        <aside class="controls" aria-labelledby="controls-title">
+          <div class="controls-heading">
+            <p class="eyebrow">MAKE IT YOURS</p>
+            <h2 id="controls-title">Scene controls</h2>
+          </div>
+          <div class="control">
+            <div class="label-row">
+              <label for="light">Light position</label><output id="light-value" for="light">−3.0</output>
+            </div>
+            <input id="light" type="range" min="-8" max="8" step="0.5" value="-3" />
+            <div class="range-ends"><span>LEFT</span><span>RIGHT</span></div>
+          </div>
+          <div class="control">
+            <div class="label-row">
+              <label for="camera">Camera orbit</label><output id="camera-value" for="camera">0°</output>
+            </div>
+            <input id="camera" type="range" min="-60" max="60" step="5" value="0" />
+            <div class="range-ends"><span>−60°</span><span>+60°</span></div>
+          </div>
+          <div class="control">
+            <div class="label-row">
+              <label for="resolution">Render resolution</label
+              ><output id="resolution-value" for="resolution">256 px</output>
+            </div>
+            <input id="resolution" type="range" min="128" max="384" step="32" value="256" />
+            <p class="hint">More pixels, more detail. Lower values keep changes quick.</p>
+          </div>
+          <div class="toggle-row">
+            <div>
+              <label for="reflections">Reflections</label>
+              <p class="hint">Let light bounce.</p>
+            </div>
+            <input id="reflections" type="checkbox" checked />
+          </div>
+          <button id="reset" type="button"><span aria-hidden="true">↺</span> Reset scene</button>
+          <div class="note">
+            <span aria-hidden="true">✦</span>
+            <p>No textures. No 3D engine.<br />Just light, geometry, and a browser.</p>
+          </div>
+        </aside>
+      </section>
+      <footer><span>AN AUTONOMOUS CODING EXERCISE</span><span>Math → rays → pixels</span></footer>
+    </main>
+  </body>
+</html>

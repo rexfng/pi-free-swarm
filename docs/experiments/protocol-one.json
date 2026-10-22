@@ -1,0 +1,63 @@
+{
+  "kind": "deterministic-mcp-protocol-smoke",
+  "autonomousAiBenchmark": false,
+  "description": "Scripted workers copied fixed fixtures. This verifies protocol, coordination and source integration; it does not measure model quality or AI cost-effectiveness.",
+  "agents": 1,
+  "startedAt": "2026-10-22T06:05:19.964Z",
+  "wallClockMs": 1736,
+  "tokens": null,
+  "apiSpendUsd": 0,
+  "paidApiRequests": 0,
+  "duplicateInvestigations": null,
+  "taskClaimConflicts": 0,
+  "metrics": {
+    "totalTasks": 3,
+    "completedTasks": 3,
+    "messages": 5,
+    "fileConflicts": 0,
+    "taskRetries": 0,
+    "toolCalls": 23,
+    "toolFailures": 0,
+    "averageTaskDurationMs": 920.6666666666666,
+    "completedTasksPerMinute": 110.15911872705018,
+    "activeMs": 364,
+    "coordinationMs": 21,
+    "coordinationOverheadRatio": 0.057692307692307696,
+    "byAgent": [
+      {
+        "agentId": "worker-1",
+        "activityMs": {
+          "understanding": 0,
+          "research": 0,
+          "hypothesis": 0,
+          "implementation": 185,
+          "debugging": 0,
+          "testing": 0,
+          "review": 0,
+          "coordination": 21,
+          "compaction": 0,
+          "housekeeping": 158,
+          "idle": 30,
+          "blocked": 0
+        },
+        "activeMs": 364,
+        "idleMs": 30,
+        "blockedMs": 0,
+        "toolCalls": 23,
+        "toolFailures": 0
+      }
+    ]
+  },
+  "commits": [
+    {
+      "agentId": "worker-1",
+      "sourceCommit": "3fb9e4240ac7532345ed80affe9b84fc02c593b0",
+      "integratedCommit": "3fb9e4240ac7532345ed80affe9b84fc02c593b0"
+    }
+  ],
+  "verification": {
+    "passed": true,
+    "tests": 3
+  },
+  "complete": true
+}

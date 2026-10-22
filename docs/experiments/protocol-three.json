@@ -1,0 +1,117 @@
+{
+  "kind": "deterministic-mcp-protocol-smoke",
+  "autonomousAiBenchmark": false,
+  "description": "Scripted workers copied fixed fixtures. This verifies protocol, coordination and source integration; it does not measure model quality or AI cost-effectiveness.",
+  "agents": 3,
+  "startedAt": "2026-10-22T06:05:16.150Z",
+  "wallClockMs": 3531,
+  "tokens": null,
+  "apiSpendUsd": 0,
+  "paidApiRequests": 0,
+  "duplicateInvestigations": null,
+  "taskClaimConflicts": 1,
+  "metrics": {
+    "totalTasks": 3,
+    "completedTasks": 3,
+    "messages": 9,
+    "fileConflicts": 0,
+    "taskRetries": 0,
+    "toolCalls": 34,
+    "toolFailures": 1,
+    "averageTaskDurationMs": 1829.3333333333333,
+    "completedTasksPerMinute": 52.64697279906405,
+    "activeMs": 1437,
+    "coordinationMs": 280,
+    "coordinationOverheadRatio": 0.19485038274182323,
+    "byAgent": [
+      {
+        "agentId": "worker-1",
+        "activityMs": {
+          "understanding": 0,
+          "research": 0,
+          "hypothesis": 0,
+          "implementation": 60,
+          "debugging": 0,
+          "testing": 0,
+          "review": 0,
+          "coordination": 93,
+          "compaction": 0,
+          "housekeeping": 561,
+          "idle": 25,
+          "blocked": 0
+        },
+        "activeMs": 714,
+        "idleMs": 25,
+        "blockedMs": 0,
+        "toolCalls": 11,
+        "toolFailures": 0
+      },
+      {
+        "agentId": "worker-2",
+        "activityMs": {
+          "understanding": 0,
+          "research": 0,
+          "hypothesis": 0,
+          "implementation": 56,
+          "debugging": 0,
+          "testing": 0,
+          "review": 0,
+          "coordination": 168,
+          "compaction": 0,
+          "housekeeping": 196,
+          "idle": 382,
+          "blocked": 0
+        },
+        "activeMs": 420,
+        "idleMs": 382,
+        "blockedMs": 0,
+        "toolCalls": 11,
+        "toolFailures": 0
+      },
+      {
+        "agentId": "worker-3",
+        "activityMs": {
+          "understanding": 0,
+          "research": 0,
+          "hypothesis": 0,
+          "implementation": 114,
+          "debugging": 3,
+          "testing": 0,
+          "review": 0,
+          "coordination": 19,
+          "compaction": 0,
+          "housekeeping": 167,
+          "idle": 184,
+          "blocked": 0
+        },
+        "activeMs": 303,
+        "idleMs": 184,
+        "blockedMs": 0,
+        "toolCalls": 12,
+        "toolFailures": 1
+      }
+    ]
+  },
+  "commits": [
+    {
+      "agentId": "worker-1",
+      "sourceCommit": "20e007ccdb69c75a16c6a05ae64611ae49ef0b4e",
+      "integratedCommit": "20e007ccdb69c75a16c6a05ae64611ae49ef0b4e"
+    },
+    {
+      "agentId": "worker-2",
+      "sourceCommit": "b372081579e8a1ac4b8cbe1795cde7c9ecc8ca37",
+      "integratedCommit": "1c12d8425f93bf72a6a0309f36ca19ddf9db498c"
+    },
+    {
+      "agentId": "worker-3",
+      "sourceCommit": "8a183f28ac5cd04c09fbb5457d7ae931db84c1d6",
+      "integratedCommit": "45f7fcc54ee4980ac57a4bd87ad90fde9710dd75"
+    }
+  ],
+  "verification": {
+    "passed": true,
+    "tests": 3
+  },
+  "complete": true
+}

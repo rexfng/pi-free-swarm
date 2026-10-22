@@ -225,8 +225,12 @@ export class AgentSupervisor {
       if (response.success !== true) {
         return { accepted: false, error: typeof response.error === "string" ? response.error : "Prompt rejected." };
       }
-      // A fast new turn can settle in the same batch as its prompt response.
-      if (life.runStarts === runStarts) life.deferredSettle = false;
+      // Reserve accepted work before agent_start arrives, so delivery cannot mistake it for an unread idle queue.
+      // A fast new turn can also settle in the same batch as its prompt response.
+      if (life.runStarts === runStarts) {
+        life.deferredSettle = false;
+        this.#setStatus("working");
+      }
       life.watchdog.rearm();
       return { accepted: true };
     } catch {

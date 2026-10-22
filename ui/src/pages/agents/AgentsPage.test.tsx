@@ -63,7 +63,7 @@ afterEach(() => {
 
 function mount(path: string) {
   render(
-    <MemoryRouter initialEntries={[path]} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+    <MemoryRouter initialEntries={[path]}>
       <SwarmStreamProvider swarmId="3">
         <Routes>
           <Route path="/s/:id/agents/:name?" element={<AgentsPage />} />
